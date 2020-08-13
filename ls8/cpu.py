@@ -2,9 +2,10 @@
 
 import sys
 
-LDI = 0b10000010
-PRN = 0b01000111
-HLT = 0b00000001
+LDI  = 0b10000010
+PRN  = 0b01000111
+HLT  = 0b00000001
+MULT = 0b10100010
 
 
 
@@ -49,8 +50,8 @@ class CPU:
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
-        if op == "ADD":
-            self.reg[reg_a] += self.reg[reg_b]
+        if op ==  "MULT":
+            self.reg[self.ram[reg_a]] *= self.reg[self.ram[reg_b]]
         #elif op == "SUB": etc
         else:
             raise Exception("Unsupported ALU operation")
@@ -74,6 +75,10 @@ class CPU:
             print(" %02X" % self.reg[i], end='')
 
         print()
+
+    def MULT(self):
+        self.alu('MULT', self.pc+1, self.pc+2)
+        self.pc += 3
 
     def ram_read(self):
         index = self.ram[self.pc + 1]
